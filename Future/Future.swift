@@ -11,7 +11,8 @@ import Foundation
 class Future<T> {
 	var resolvedValue = T[]()
 	var completionHandler: ((T?, NSError?)->())?
-	var successHandler: (T?->())?
+	var successHandler: (T->())?
+	var failureHandler: (NSError->())?
 
 	init(closure: ()->T?) {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
@@ -22,6 +23,10 @@ class Future<T> {
 			if self.resolvedValue.isEmpty {
 				if let handler = self.completionHandler {
 					handler(nil, NSError.errorWithDomain("Failed.", code: 100, userInfo: nil))
+				}
+
+				if let handler = self.failureHandler {
+					handler(NSError.errorWithDomain("Failed", code: 100, userInfo: nil))
 				}
 			} else {
 				if let handler = self.successHandler {
@@ -39,7 +44,11 @@ class Future<T> {
 		completionHandler = handler;
 	}
 
-	func onSuccess(handler: T?->()) {
+	func onSuccess(handler: T->()) {
 		successHandler = handler
+	}
+
+	func onFailure(handler: NSError->()) {
+		failureHandler = handler
 	}
 }
