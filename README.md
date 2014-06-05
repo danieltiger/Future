@@ -14,4 +14,21 @@ thing.onSuccess { result in
 }
 
 // "Hello, world"
+
+var thing2: Future<String> = Future {
+	sleep(42)
+	return nil
+}
+
+thing2.onComplete { (result, error) in
+	if result {
+		println("Hello, \(result)")
+	}
+	
+	if error {
+		println(error.localizedDescription)
+	}
+}
+
+// "Failed."
 ````
