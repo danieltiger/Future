@@ -20,8 +20,35 @@ class FutureTests: XCTestCase {
         super.tearDown()
     }
 
+	func testOnComplete() {
+		var exp = expectationWithDescription("onComplete with success worked")
+		var exp2 = expectationWithDescription("onComplete with failure worked")
+
+		var test: Future<String> = Future {
+			return "world"
+		}
+
+		test.onComplete { (result, error) in
+			if result == "world" {
+				exp.fulfill()
+			}
+		}
+
+		var test2: Future<String> = Future {
+			return nil
+		}
+
+		test2.onComplete { (result, error) in
+			if result == nil && error != nil {
+				exp2.fulfill()
+			}
+		}
+
+		waitForExpectationsWithTimeout(5, handler: nil)
+	}
+
 	func testOnSuccess() {
-		var exp = expectationWithDescription("Future worked")
+		var exp = expectationWithDescription("onSuccess worked")
 
 		var test: Future<String> = Future {
 			return "world"
@@ -31,7 +58,7 @@ class FutureTests: XCTestCase {
 			exp.fulfill()
 		}
 
-		waitForExpectationsWithTimeout(5, nil)
+		waitForExpectationsWithTimeout(5, handler: nil)
 	}
 
 }

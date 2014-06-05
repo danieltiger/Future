@@ -10,18 +10,36 @@ import Foundation
 
 class Future<T> {
 	var resolvedValue = T[]()
-	var successHandler: (T->())?
+	var completionHandler: ((T?, NSError?)->())?
+	var successHandler: (T?->())?
 
-	init(closure: ()->T) {
+	init(closure: ()->T?) {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-			self.resolvedValue = [closure()]
-			if let handler = self.successHandler {
-				handler(self.resolvedValue[0])
+			if let value = closure() {
+				self.resolvedValue = [value]
+			}
+
+			if self.resolvedValue.isEmpty {
+				if let handler = self.completionHandler {
+					handler(nil, NSError.errorWithDomain("Failed.", code: 100, userInfo: nil))
+				}
+			} else {
+				if let handler = self.successHandler {
+					handler(self.resolvedValue[0])
+				}
+
+				if let handler = self.completionHandler {
+					handler(self.resolvedValue[0], nil)
+				}
 			}
 		}
 	}
 
-	func onSuccess(handler: T->()) {
+	func onComplete(handler: (T?, NSError?)->()) {
+		completionHandler = handler;
+	}
+
+	func onSuccess(handler: T?->()) {
 		successHandler = handler
 	}
 }
