@@ -10,6 +10,8 @@
 		0789FF2E193FFBD10098E2A1 /* Future.h in Headers */ = {isa = PBXBuildFile; fileRef = 0789FF2D193FFBD10098E2A1 /* Future.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0789FF34193FFBD10098E2A1 /* Future.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0789FF28193FFBD10098E2A1 /* Future.framework */; };
 		0789FF3B193FFBD10098E2A1 /* FutureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0789FF3A193FFBD10098E2A1 /* FutureTests.swift */; };
+		0789FF45193FFC200098E2A1 /* Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0789FF44193FFC200098E2A1 /* Future.swift */; };
+		0789FF46193FFC200098E2A1 /* Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0789FF44193FFC200098E2A1 /* Future.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +31,7 @@
 		0789FF33193FFBD10098E2A1 /* FutureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FutureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0789FF39193FFBD10098E2A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0789FF3A193FFBD10098E2A1 /* FutureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FutureTests.swift; sourceTree = "<group>"; };
+		0789FF44193FFC200098E2A1 /* Future.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Future.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +76,7 @@
 			children = (
 				0789FF2D193FFBD10098E2A1 /* Future.h */,
 				0789FF2B193FFBD10098E2A1 /* Supporting Files */,
+				0789FF44193FFC200098E2A1 /* Future.swift */,
 			);
 			path = Future;
 			sourceTree = "<group>";
@@ -210,6 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0789FF45193FFC200098E2A1 /* Future.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0789FF46193FFC200098E2A1 /* Future.swift in Sources */,
 				0789FF3B193FFBD10098E2A1 /* FutureTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -320,6 +326,7 @@
 		0789FF3F193FFBD10098E2A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -329,12 +336,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		0789FF40193FFBD10098E2A1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -398,6 +407,7 @@
 				0789FF40193FFBD10098E2A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0789FF41193FFBD10098E2A1 /* Build configuration list for PBXNativeTarget "FutureTests" */ = {
 			isa = XCConfigurationList;
@@ -406,6 +416,7 @@
 				0789FF43193FFBD10098E2A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
