@@ -31,4 +31,15 @@ thing2.onComplete { (result, error) in
 }
 
 // "Failed."
+
+var thing3: Future<String> = Future {
+	sleep(42)
+	return nil
+}
+
+thing3.onFailure { error in
+	println(error.localizedDescription)
+}
+
+// "Failed."
 ````
