@@ -8,47 +8,49 @@
 
 import Foundation
 
-class Future<T> {
-	var resolvedValue = T[]()
-	var completionHandler: ((T?, NSError?)->())?
-	var successHandler: (T->())?
-	var failureHandler: (NSError->())?
-
-	init(closure: ()->T?) {
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-			if let value = closure() {
-				self.resolvedValue = [value]
+struct Future<T> {
+	var resolvedValue: T? {
+	didSet {
+		if let handlers = completionHandlers {
+			for handler in handlers {
+				handler(resolvedValue, resolvedValue ? true : false)
 			}
+		}
+	}
+	}
 
-			if self.resolvedValue.isEmpty {
-				if let handler = self.completionHandler {
-					handler(nil, NSError.errorWithDomain("Failed.", code: 100, userInfo: nil))
-				}
+	var completionHandlers:Array<(T?, Bool)->()>?
 
-				if let handler = self.failureHandler {
-					handler(NSError.errorWithDomain("Failed", code: 100, userInfo: nil))
-				}
-			} else {
-				if let handler = self.successHandler {
-					handler(self.resolvedValue[0])
-				}
+	init() {}
 
-				if let handler = self.completionHandler {
-					handler(self.resolvedValue[0], nil)
-				}
+	init(body: ()->T?) {
+		apply(body)
+	}
+
+	mutating func apply(body: ()->T?) {
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+			if let value = body() {
+				self.resolvedValue = value
 			}
 		}
 	}
 
-	func onComplete(handler: (T?, NSError?)->()) {
-		completionHandler = handler;
+	func onComplete(handler: (T?, Bool)->()) {
+		if var handlers = completionHandlers {
+			handlers.append(handler)
+		}
 	}
 
-	func onSuccess(handler: T->()) {
-		successHandler = handler
-	}
-
-	func onFailure(handler: NSError->()) {
-		failureHandler = handler
-	}
+	// Not currently possible due to language limitations. Hopefully will be fixed soon.
+//	mutating func map<U>(transform: T -> U) -> Future<U> {
+//		var future = Future<U>()
+//
+//		onComplete { (result, success) in
+//			self.apply {
+//				return transform(result)
+//			}
+//		}
+//
+//		return future
+//	}
 }
