@@ -20,13 +20,12 @@ var thing2: Future<String> = Future {
 	return nil
 }
 
-thing2.onComplete { (result, error) in
-	if result {
+thing2.onComplete { (result, success) in
+	switch success {
+	case true:
 		println("Hello, \(result)")
-	}
-	
-	if error {
-		println(error.localizedDescription)
+	case false:
+		println("Failed.")
 	}
 }
 
