@@ -15,9 +15,21 @@ class Future<T> {
 		for handler in completionHandlers {
 			handler(resolvedValue.isEmpty ? nil : resolvedValue[0])
 		}
+
+		if (resolvedValue.isEmpty == false) {
+			for handler in successHandlers {
+				handler(resolvedValue[0])
+			}
+		} else {
+			for handler in failureHandlers {
+				handler()
+			}
+		}
 	}
 	}
-	var completionHandlers: ((T?)->())[] = []
+	var completionHandlers: (T? -> ())[] = []
+	var successHandlers: (T? -> ())[] = []
+	var failureHandlers: (() -> ())[] = []
 
 	init() { }
 	init(futureWork: ()->T?) {
@@ -26,8 +38,16 @@ class Future<T> {
 		}
 	}
 
-	func onComplete(handler: (T?)->()) {
+	func onComplete(handler: T? -> ()) {
 		completionHandlers.append(handler)
+	}
+
+	func onSuccess(handler: T? -> ()) {
+		successHandlers.append(handler)
+	}
+
+	func onFailure(handler: () -> ()) {
+		failureHandlers.append(handler)
 	}
 
 	func map<U>(handler: T -> U) -> Future<U> {
