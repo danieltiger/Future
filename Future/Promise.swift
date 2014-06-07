@@ -11,8 +11,17 @@ import Foundation
 class Promise<T> {
 	var future: Future<T> = Future<T>()
 
-	func complete(result: T) {
-		future.resolvedValue.append(result)
-		future.succeeded = true
+	init() { }
+	init(future: Future<T>) {
+		self.future = future
+	}
+
+	func complete(result: T?) {
+		if result {
+			future.resolvedValue.append(result!)
+			future.succeeded = true
+		} else {
+			future.succeeded = false
+		}
 	}
 }

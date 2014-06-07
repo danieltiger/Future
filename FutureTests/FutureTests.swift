@@ -29,8 +29,8 @@ class FutureTests: XCTestCase {
 			return "world"
 		}
 
-		test.onComplete { (result, success) in
-			if result == "world" && success == true {
+		test.onComplete { result in
+			if result == "world" {
 				exp.fulfill()
 			}
 		}
@@ -40,8 +40,8 @@ class FutureTests: XCTestCase {
 			return nil
 		}
 
-		test2.onComplete { (result, success) in
-			if success == false {
+		test2.onComplete { result in
+			if result == nil {
 				exp2.fulfill()
 			}
 		}
@@ -62,8 +62,8 @@ class FutureTests: XCTestCase {
 			return v + "world"
 		}
 
-		test2.onComplete { (v, s) in
-			if v == "Hello, world" {
+		test2.onComplete { result in
+			if result == "Hello, world" {
 				exp.fulfill()
 			}
 		}
