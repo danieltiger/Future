@@ -49,6 +49,6 @@ class Future<T> {
 			}
 		}
 
-		return p.future!
+		return p.future
 	}
 }
