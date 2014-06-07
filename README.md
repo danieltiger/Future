@@ -1,44 +1,43 @@
 Future
 ======
 
-An in-progress implementation of Scala-style Futures in Swift
+An in-progress implementation of Scala-style Futures in Swift. Current only some things are supported but I'm moving pretty quickly.
+
+Creating a future is as simple as passing a closure with the work you want to do asynchronously. 
 
 ````
-var thing: Future<String> = Future {
-  sleep(42)
-  return "world"
+var testFuture: Future<String> = Future {
+    // Some long running process
+    return result
 }
+````
 
-thing.onSuccess { result in
+You can set onSuccess, onComplete, and onFailure callbacks for the computation. You can have as many of each of these as you want.
+
+````
+testFuture.onSuccess { result in
   println("Hello, \(result)")
 }
 
-// "Hello, world"
-
-var thing2: Future<String> = Future {
-	sleep(42)
-	return nil
+testFuture.onFailure {
+  println("Failed.")
 }
 
-thing2.onComplete { (result, success) in
-	switch success {
-	case true:
-		println("Hello, \(result)")
-	case false:
-		println("Failed.")
-	}
+testFuture.onComplete { result in
+  if result {
+    println("Hello, \(result)")
+  } else {
+    println("Failed.")
+  }
 }
+````
 
-// "Failed."
+In addition I'm trying to support as many combinators as I can. So far I've implemented map, which takes the result of one future and passes it into the computation of a second. It returns the second future and then you can add callbacks on the result of the combined work. You are guaranteed that the second closure won't be run until the first one has completed successfully. If the first one fails you will get that failure on the second one with it being run.
 
-var thing3: Future<String> = Future {
-	sleep(42)
-	return nil
+````
+var testMappedFuture = testFuture.map { result in
+  // Some other long running process
+  
+  return result
 }
-
-thing3.onFailure { error in
-	println(error.localizedDescription)
-}
-
-// "Failed."
 ````
