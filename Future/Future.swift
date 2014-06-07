@@ -40,16 +40,15 @@ class Future<T> {
 		completionHandlers.append(handler)
 	}
 
-	// Not currently possible due to language limitations. Hopefully will be fixed soon.
-//	mutating func map<U>(transform: T -> U) -> Future<U> {
-//		var future = Future<U>()
-//
-//		onComplete { (result, success) in
-//			self.apply {
-//				return transform(result)
-//			}
-//		}
-//
-//		return future
-//	}
+	func map<U>(f: T -> U) -> Future<U> {
+		var p = Promise<U>()
+
+		onComplete { (result, success) in
+			if let v = result {
+				p.complete(f(v))
+			}
+		}
+
+		return p.future!
+	}
 }

@@ -48,4 +48,26 @@ class FutureTests: XCTestCase {
 
 		waitForExpectationsWithTimeout(2, handler: nil)
 	}
+
+	func testMap() {
+		var exp = expectationWithDescription("map")
+
+		var test: Future<String> = Future {
+			sleep(1)
+			return "Hello, "
+		}
+
+		var test2: Future<String> = test.map { v in
+			sleep(1)
+			return v + "world"
+		}
+
+		test2.onComplete { (v, s) in
+			if v == "Hello, world" {
+				exp.fulfill()
+			}
+		}
+
+		waitForExpectationsWithTimeout(3, handler: nil)
+	}
 }

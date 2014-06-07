@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07001F731942E33C00C2577E /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07001F721942E33C00C2577E /* Promise.swift */; };
+		07001F741942E6FE00C2577E /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07001F721942E33C00C2577E /* Promise.swift */; };
 		0789FF2E193FFBD10098E2A1 /* Future.h in Headers */ = {isa = PBXBuildFile; fileRef = 0789FF2D193FFBD10098E2A1 /* Future.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0789FF34193FFBD10098E2A1 /* Future.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0789FF28193FFBD10098E2A1 /* Future.framework */; };
 		0789FF3B193FFBD10098E2A1 /* FutureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0789FF3A193FFBD10098E2A1 /* FutureTests.swift */; };
@@ -25,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		07001F721942E33C00C2577E /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
 		0789FF28193FFBD10098E2A1 /* Future.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Future.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0789FF2C193FFBD10098E2A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0789FF2D193FFBD10098E2A1 /* Future.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Future.h; sourceTree = "<group>"; };
@@ -77,6 +80,7 @@
 				0789FF2D193FFBD10098E2A1 /* Future.h */,
 				0789FF2B193FFBD10098E2A1 /* Supporting Files */,
 				0789FF44193FFC200098E2A1 /* Future.swift */,
+				07001F721942E33C00C2577E /* Promise.swift */,
 			);
 			path = Future;
 			sourceTree = "<group>";
@@ -215,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0789FF45193FFC200098E2A1 /* Future.swift in Sources */,
+				07001F731942E33C00C2577E /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,6 +229,7 @@
 			files = (
 				0789FF46193FFC200098E2A1 /* Future.swift in Sources */,
 				0789FF3B193FFBD10098E2A1 /* FutureTests.swift in Sources */,
+				07001F741942E6FE00C2577E /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
