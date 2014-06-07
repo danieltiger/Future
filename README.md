@@ -37,7 +37,6 @@ In addition I'm trying to support as many combinators as I can. So far I've impl
 ````
 var testMappedFuture = testFuture.map { result in
   // Some other long running process
-  
   return result
 }
 ````
