@@ -8,18 +8,16 @@
 
 import Foundation
 
-struct Future<T> {
-	var resolvedValue: T? {
+class Future<T> {
+	var resolvedValue: T?[] = []
+	var succeeded: Bool = false {
 	didSet {
-		if let handlers = completionHandlers {
-			for handler in handlers {
-				handler(resolvedValue, resolvedValue ? true : false)
-			}
+		for handler in completionHandlers {
+			handler(resolvedValue.isEmpty ? nil : resolvedValue[0], succeeded)
 		}
 	}
 	}
-
-	var completionHandlers:Array<(T?, Bool)->()>?
+	var completionHandlers: ((T?, Bool)->())[] = []
 
 	init() {}
 
@@ -27,18 +25,19 @@ struct Future<T> {
 		apply(body)
 	}
 
-	mutating func apply(body: ()->T?) {
+	func apply(body: ()->T?) {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
 			if let value = body() {
-				self.resolvedValue = value
+				self.resolvedValue.append(value)
+				self.succeeded = true
+			} else {
+				self.succeeded = false
 			}
 		}
 	}
 
 	func onComplete(handler: (T?, Bool)->()) {
-		if var handlers = completionHandlers {
-			handlers.append(handler)
-		}
+		completionHandlers.append(handler)
 	}
 
 	// Not currently possible due to language limitations. Hopefully will be fixed soon.

@@ -21,29 +21,31 @@ class FutureTests: XCTestCase {
     }
 
 	func testOnComplete() {
-		var exp = expectationWithDescription("onComplete with success worked")
-		var exp2 = expectationWithDescription("onComplete with failure worked")
+		var exp = expectationWithDescription("onComplete success")
+		var exp2 = expectationWithDescription("onComplete failure")
 
 		var test: Future<String> = Future {
+			sleep(1)
 			return "world"
 		}
 
-		test.onComplete { (result, error) in
-			if result == "world" {
+		test.onComplete { (result, success) in
+			if result == "world" && success == true {
 				exp.fulfill()
 			}
 		}
 
 		var test2: Future<String> = Future {
+			sleep(1)
 			return nil
 		}
 
-		test2.onComplete { (result, error) in
-			if result == nil && error != nil {
+		test2.onComplete { (result, success) in
+			if success == false {
 				exp2.fulfill()
 			}
 		}
 
-		waitForExpectationsWithTimeout(5, handler: nil)
+		waitForExpectationsWithTimeout(2, handler: nil)
 	}
 }
