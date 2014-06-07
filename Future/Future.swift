@@ -10,7 +10,7 @@ import Foundation
 
 class Future<T> {
 	var resolvedValue: T[] = []
-	var succeeded: Bool = false {
+	var isComplete: Bool = false {
 	didSet {
 		for handler in completionHandlers {
 			handler(resolvedValue.isEmpty ? nil : resolvedValue[0])
@@ -32,10 +32,22 @@ class Future<T> {
 	var failureHandlers: (() -> ())[] = []
 
 	init() { }
-	init(futureWork: ()->T?) {
+	init(futureWork: () -> T?) {
+		performFutureWork(futureWork)
+	}
+
+	func performFutureWork(futureWork: () -> T?) {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-			Promise<T>(future: self).complete(futureWork())
+			self.completeFuture(futureWork())
 		}
+	}
+
+	func completeFuture(result: T?) {
+		if result {
+			resolvedValue.append(result!)
+		}
+
+		isComplete = true
 	}
 
 	func onComplete(handler: T? -> ()) {
@@ -51,18 +63,16 @@ class Future<T> {
 	}
 
 	func map<U>(handler: T -> U) -> Future<U> {
-		var promise = Promise<U>()
+		var future = Future<U>()
 
 		onComplete { result in
-			var mappedWork: U? = nil
-
 			if result {
-				mappedWork = handler(result!)
+				future.performFutureWork { return handler(result!) }
+			} else {
+				future.completeFuture(nil)
 			}
-
-			promise.complete(mappedWork)
 		}
 
-		return promise.future
+		return future
 	}
 }

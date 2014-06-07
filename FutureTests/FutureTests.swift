@@ -49,7 +49,7 @@ class FutureTests: XCTestCase {
 		waitForExpectationsWithTimeout(2, handler: nil)
 	}
 
-	func testOnSucces() {
+	func testOnSuccess() {
 		var exp = expectationWithDescription("onSuccess")
 
 		var test: Future<String> = Future {
@@ -89,9 +89,9 @@ class FutureTests: XCTestCase {
 			return "Hello, "
 		}
 
-		var test2: Future<String> = test.map { v in
+		var test2: Future<String> = test.map { result in
 			sleep(1)
-			return v + "world"
+			return result + "world"
 		}
 
 		test2.onComplete { result in
