@@ -67,7 +67,7 @@ class Future<T> {
 
 		onComplete { result in
 			if result {
-				future.performFutureWork { return handler(result!) }
+				future.performFutureWork { handler(result!) }
 			} else {
 				future.completeFuture(nil)
 			}
