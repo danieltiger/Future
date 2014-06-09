@@ -24,7 +24,7 @@ class Future<T> {
 		performFutureWork(futureWork)
 	}
 
-	func performFutureWork(futureWork: () -> T?) {
+	func performFutureWork(futureWork: () -> T?) {		
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
 			self.completeFuture(futureWork())
 		}
@@ -40,28 +40,28 @@ class Future<T> {
 	}
 
 	func onComplete(handler: T? -> ()) {
-		operationQueue.addOperationWithBlock {
+		operationQueue.addOperationWithBlock { [unowned self] in
 			handler(self.resolvedValue.isEmpty ? nil : self.resolvedValue[0])
 		}
 	}
 
 	func onSuccess(handler: T -> ()) {
 		if isComplete {
-			operationQueue.addOperationWithBlock {
+			operationQueue.addOperationWithBlock { [unowned self] in
 				if self.resolvedValue.isEmpty == false {
 					handler(self.resolvedValue[0])
 				}
 			}
 		} else {
-			operationQueue.addOperationWithBlock {
+			operationQueue.addOperationWithBlock { [unowned self] in
 				handler(self.resolvedValue[0])
 			}
 		}
 	}
 
 	func onFailure(handler: () -> ()) {
-		if isComplete == false {
-			operationQueue.addOperationWithBlock {
+		operationQueue.addOperationWithBlock { [unowned self] in
+			if self.isComplete && self.resolvedValue.isEmpty {
 				handler()
 			}
 		}
