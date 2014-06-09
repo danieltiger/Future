@@ -9,30 +9,18 @@
 import Foundation
 
 class Future<T> {
-	var resolvedValue: T[] = []
-	var isComplete: Bool = false {
-	didSet {
-		for handler in completionHandlers {
-			handler(resolvedValue.isEmpty ? nil : resolvedValue[0])
-		}
+	var resolvedValue: Array<T> = []
+	var isComplete: Bool = false
+	var operationQueue: NSOperationQueue
 
-		if (resolvedValue.isEmpty == false) {
-			for handler in successHandlers {
-				handler(resolvedValue[0])
-			}
-		} else {
-			for handler in failureHandlers {
-				handler()
-			}
-		}
+	init() {
+		operationQueue = NSOperationQueue()
+		operationQueue.suspended = true
 	}
-	}
-	var completionHandlers: (T? -> ())[] = []
-	var successHandlers: (T -> ())[] = []
-	var failureHandlers: (() -> ())[] = []
 
-	init() { }
-	init(futureWork: () -> T?) {
+	convenience init(futureWork: () -> T?) {
+		self.init()
+
 		performFutureWork(futureWork)
 	}
 
@@ -48,18 +36,35 @@ class Future<T> {
 		}
 
 		isComplete = true
+		operationQueue.suspended = false
 	}
 
 	func onComplete(handler: T? -> ()) {
-		completionHandlers.append(handler)
+		operationQueue.addOperationWithBlock {
+			handler(self.resolvedValue.isEmpty ? nil : self.resolvedValue[0])
+		}
 	}
 
 	func onSuccess(handler: T -> ()) {
-		successHandlers.append(handler)
+		if isComplete {
+			operationQueue.addOperationWithBlock {
+				if self.resolvedValue.isEmpty == false {
+					handler(self.resolvedValue[0])
+				}
+			}
+		} else {
+			operationQueue.addOperationWithBlock {
+				handler(self.resolvedValue[0])
+			}
+		}
 	}
 
 	func onFailure(handler: () -> ()) {
-		failureHandlers.append(handler)
+		if isComplete == false {
+			operationQueue.addOperationWithBlock {
+				handler()
+			}
+		}
 	}
 
 	func map<U>(handler: T -> U) -> Future<U> {

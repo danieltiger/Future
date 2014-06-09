@@ -20,40 +20,42 @@ class FutureTests: XCTestCase {
         super.tearDown()
     }
 
-	func testOnComplete() {
+	func testOnCompleteSuccess() {
 		var exp = expectationWithDescription("onComplete success")
-		var exp2 = expectationWithDescription("onComplete failure")
 
-		var test: Future<String> = Future {
-			sleep(1)
+		var f: Future<String> = Future {
 			return "world"
 		}
 
-		test.onComplete { result in
+		f.onComplete { result in
 			if result == "world" {
 				exp.fulfill()
 			}
 		}
 
-		var test2: Future<String> = Future {
-			sleep(1)
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testOnCompleteFailure() {
+		var exp = expectationWithDescription("onComplete failure")
+
+		var f: Future<String> = Future {
 			return nil
 		}
 
-		test2.onComplete { result in
+		f.onComplete { result in
 			if result == nil {
-				exp2.fulfill()
+				exp.fulfill()
 			}
 		}
 
-		waitForExpectationsWithTimeout(2, handler: nil)
+		waitForExpectationsWithTimeout(1, handler: nil)
 	}
 
 	func testOnSuccess() {
 		var exp = expectationWithDescription("onSuccess")
 
 		var test: Future<String> = Future {
-			sleep(1)
 			return "Hello"
 		}
 
@@ -63,14 +65,13 @@ class FutureTests: XCTestCase {
 			}
 		}
 
-		waitForExpectationsWithTimeout(2, handler: nil)
+		waitForExpectationsWithTimeout(1, handler: nil)
 	}
 
 	func testOnFailure() {
 		var exp = expectationWithDescription("onFailure")
 
 		var test: Future<String> = Future {
-			sleep(1)
 			return nil
 		}
 
@@ -78,19 +79,17 @@ class FutureTests: XCTestCase {
 			exp.fulfill()
 		}
 
-		waitForExpectationsWithTimeout(2, handler: nil)
+		waitForExpectationsWithTimeout(1, handler: nil)
 	}
 
 	func testMap() {
 		var exp = expectationWithDescription("map")
 
 		var test: Future<String> = Future {
-			sleep(1)
 			return "Hello, "
 		}
 
 		var test2: Future<String> = test.map { result in
-			sleep(1)
 			return result + "world"
 		}
 
@@ -100,7 +99,7 @@ class FutureTests: XCTestCase {
 			}
 		}
 
-		waitForExpectationsWithTimeout(3, handler: nil)
+		waitForExpectationsWithTimeout(1, handler: nil)
 	}
 
 	func testPromises() {
@@ -110,7 +109,6 @@ class FutureTests: XCTestCase {
 		var f = p.future
 
 		Future<String>() {
-			sleep(1)
 			var test = "world!"
 			p.complete(test)
 
@@ -118,8 +116,6 @@ class FutureTests: XCTestCase {
 		}
 
 		Future<String>() {
-			sleep(1)
-
 			var test = "Hello, "
 
 			f.onSuccess { result in
