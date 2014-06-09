@@ -40,3 +40,28 @@ var testMappedFuture = testFuture.map { result in
   return result
 }
 ````
+
+I've also added support for Promises. When you complete a Promise you also complete the future it contains. This let's you pass the result of one Future to another in-process Future.
+
+````
+var p = Promise<String>()
+var f = p.future
+
+var future1 = Future<String> {
+	var result = someLongRunningThing()
+	
+	p.complete(result)
+	
+	return someOtherLongRunningThing()
+}
+
+var future2 = Future<String> {
+	var value = doSomethingElseThatTakesTime()
+	
+	f.onSuccess { result in
+		doSomethingWithResult(result)
+	}
+	
+	return value
+}
+````
