@@ -21,9 +21,9 @@ class FutureTests: XCTestCase {
     }
 
 	func testOnCompleteSuccess() {
-		var exp = expectationWithDescription("onComplete success")
+		let exp = expectationWithDescription("onComplete success")
 
-		var f: Future<String> = Future {
+		let f: Future<String> = Future {
 			return "world"
 		}
 
@@ -37,9 +37,9 @@ class FutureTests: XCTestCase {
 	}
 
 	func testOnCompleteFailure() {
-		var exp = expectationWithDescription("onComplete failure")
+		let exp = expectationWithDescription("onComplete failure")
 
-		var f: Future<String> = Future {
+		let f: Future<String> = Future {
 			return nil
 		}
 
@@ -53,9 +53,9 @@ class FutureTests: XCTestCase {
 	}
 
 	func testOnSuccess() {
-		var exp = expectationWithDescription("onSuccess")
+		let exp = expectationWithDescription("onSuccess")
 
-		var test: Future<String> = Future {
+		let test: Future<String> = Future {
 			return "Hello"
 		}
 
@@ -69,9 +69,9 @@ class FutureTests: XCTestCase {
 	}
 
 	func testOnFailure() {
-		var exp = expectationWithDescription("onFailure")
+		let exp = expectationWithDescription("onFailure")
 
-		var test: Future<String> = Future {
+		let test: Future<String> = Future {
 			return nil
 		}
 
@@ -83,13 +83,13 @@ class FutureTests: XCTestCase {
 	}
 
 	func testMap() {
-		var exp = expectationWithDescription("map")
+		let exp = expectationWithDescription("map")
 
-		var test: Future<String> = Future {
+		let test: Future<String> = Future {
 			return "Hello, "
 		}
 
-		var test2: Future<String> = test.map { result in
+		let test2: Future<String> = test.map { result in
 			return result + "world"
 		}
 
@@ -103,23 +103,23 @@ class FutureTests: XCTestCase {
 	}
 
 	func testPromises() {
-		var exp = expectationWithDescription("promises")
+		let exp = expectationWithDescription("promises")
 
-		var p = Promise<String>()
-		var f = p.future
+		let p = Promise<String>()
+		let f = p.future
 
 		Future<String>() {
-			var test = "world!"
+			let test = "world!"
 			p.complete(test)
 
 			return test
 		}
 
 		Future<String>() {
-			var test = "Hello, "
+			let test = "Hello, "
 
 			f.onSuccess { result in
-				var finalResult = test + result
+				let finalResult = test + result
 
 				if finalResult == "Hello, world!" {
 					exp.fulfill()
@@ -129,6 +129,6 @@ class FutureTests: XCTestCase {
 			return test
 		}
 
-		waitForExpectationsWithTimeout(4, handler: nil)
+		waitForExpectationsWithTimeout(1, handler: nil)
 	}
 }

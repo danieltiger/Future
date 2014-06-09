@@ -9,7 +9,7 @@
 import Foundation
 
 class Promise<T> {
-	var future: Future<T> = Future<T>()
+	let future: Future<T> = Future<T>()
 
 	func complete(value: T) {
 		if future.resolvedValue.isEmpty {

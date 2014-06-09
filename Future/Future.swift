@@ -11,7 +11,7 @@ import Foundation
 class Future<T> {
 	var resolvedValue: Array<T> = []
 	var isComplete: Bool = false
-	var operationQueue: NSOperationQueue
+	let operationQueue: NSOperationQueue
 
 	init() {
 		operationQueue = NSOperationQueue()
@@ -68,7 +68,7 @@ class Future<T> {
 	}
 
 	func map<U>(handler: T -> U) -> Future<U> {
-		var future = Future<U>()
+		let future = Future<U>()
 
 		onComplete { result in
 			if result {
