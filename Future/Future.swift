@@ -28,7 +28,7 @@ class Future<T> {
 	}
 	}
 	var completionHandlers: (T? -> ())[] = []
-	var successHandlers: (T? -> ())[] = []
+	var successHandlers: (T -> ())[] = []
 	var failureHandlers: (() -> ())[] = []
 
 	init() { }
@@ -54,7 +54,7 @@ class Future<T> {
 		completionHandlers.append(handler)
 	}
 
-	func onSuccess(handler: T? -> ()) {
+	func onSuccess(handler: T -> ()) {
 		successHandlers.append(handler)
 	}
 

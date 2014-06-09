@@ -102,4 +102,37 @@ class FutureTests: XCTestCase {
 
 		waitForExpectationsWithTimeout(3, handler: nil)
 	}
+
+	func testPromises() {
+		var exp = expectationWithDescription("promises")
+
+		var p = Promise<String>()
+		var f = p.future
+
+		Future<String>() {
+			sleep(1)
+			var test = "world!"
+			p.complete(test)
+
+			return test
+		}
+
+		Future<String>() {
+			sleep(1)
+
+			var test = "Hello, "
+
+			f.onSuccess { result in
+				var finalResult = test + result
+
+				if finalResult == "Hello, world!" {
+					exp.fulfill()
+				}
+			}
+
+			return test
+		}
+
+		waitForExpectationsWithTimeout(4, handler: nil)
+	}
 }
